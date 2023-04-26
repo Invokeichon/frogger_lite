@@ -1,0 +1,6 @@
+[submodule "deps/box_renderer"]
+	path = deps/box_renderer
+	url = https://github.com/dantros/box_renderer
+[submodule "deps/miniaudio"]
+	path = deps/miniaudio
+	url = https://github.com/mackron/miniaudio

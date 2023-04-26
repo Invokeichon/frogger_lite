@@ -1,0 +1,13 @@
+prefix=C:/Users/Matías González/Desktop/Universidad/Semestres/2023-1/Motores de Juegos/Tarea/T1/frogger_lite/out/install/x64-Debug
+exec_prefix=${prefix}
+includedir=C:/Users/Matías González/Desktop/Universidad/Semestres/2023-1/Motores de Juegos/Tarea/T1/frogger_lite/out/install/x64-Debug/include
+libdir=C:/Users/Matías González/Desktop/Universidad/Semestres/2023-1/Motores de Juegos/Tarea/T1/frogger_lite/out/install/x64-Debug/lib
+
+Name: GLFW
+Description: A multi-platform library for OpenGL, window and input
+Version: 3.3.8
+URL: https://www.glfw.org/
+Requires.private: 
+Libs: -L${libdir} -lglfw3
+Libs.private:  -lgdi32
+Cflags: -I${includedir}

@@ -1,0 +1,58 @@
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: C:/Users/Matías González/Desktop/Universidad/Semestres/2023-1/Motores de Juegos/Tarea/T1/frogger_lite/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-wj4ylm
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_4d83b && [1/2] Building C object CMakeFiles\cmTC_4d83b.dir\src.c.obj
+FAILED: CMakeFiles/cmTC_4d83b.dir/src.c.obj 
+C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\MSVC\1435~1.322\bin\Hostx64\x64\cl.exe  /nologo -DCMAKE_HAVE_LIBC_PTHREAD  /DWIN32 /D_WINDOWS  /Zi /Ob0 /Od /RTC1 -MDd /showIncludes /FoCMakeFiles\cmTC_4d83b.dir\src.c.obj /FdCMakeFiles\cmTC_4d83b.dir\ /FS -c "C:\Users\Matías González\Desktop\Universidad\Semestres\2023-1\Motores de Juegos\Tarea\T1\frogger_lite\out\build\x64-Debug\CMakeFiles\CMakeScratch\TryCompile-wj4ylm\src.c"
+C:\Users\Matías González\Desktop\Universidad\Semestres\2023-1\Motores de Juegos\Tarea\T1\frogger_lite\out\build\x64-Debug\CMakeFiles\CMakeScratch\TryCompile-wj4ylm\src.c(1): fatal error C1083: No se puede abrir el archivo incluir: 'pthread.h': No such file or directory
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: C:/Users/Matías González/Desktop/Universidad/Semestres/2023-1/Motores de Juegos/Tarea/T1/frogger_lite/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-39xvpt
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_2e646 && [1/2] Building C object CMakeFiles\cmTC_2e646.dir\CheckFunctionExists.c.obj
+[2/2] Linking C executable cmTC_2e646.exe
+FAILED: cmTC_2e646.exe 
+cmd.exe /C "cd . && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_2e646.dir --rc=C:\PROGRA~2\WI3CF2~1\10\bin\100220~1.0\x64\rc.exe --mt=C:\PROGRA~2\WI3CF2~1\10\bin\100220~1.0\x64\mt.exe --manifests  -- C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\MSVC\1435~1.322\bin\Hostx64\x64\link.exe /nologo CMakeFiles\cmTC_2e646.dir\CheckFunctionExists.c.obj  /out:cmTC_2e646.exe /implib:cmTC_2e646.lib /pdb:cmTC_2e646.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  pthreads.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
+LINK Pass 1: command "C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\MSVC\1435~1.322\bin\Hostx64\x64\link.exe /nologo CMakeFiles\cmTC_2e646.dir\CheckFunctionExists.c.obj /out:cmTC_2e646.exe /implib:cmTC_2e646.lib /pdb:cmTC_2e646.pdb /version:0.0 /machine:x64 /debug /INCREMENTAL /subsystem:console pthreads.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTFILE:CMakeFiles\cmTC_2e646.dir/intermediate.manifest CMakeFiles\cmTC_2e646.dir/manifest.res" failed (exit code 1104) with the following output:
+LINK : fatal error LNK1104: no se puede abrir el archivo 'pthreads.lib'
+ninja: build stopped: subcommand failed.
+
+
+
+Determining if the function pthread_create exists in the pthread failed with the following output:
+Change Dir: C:/Users/Matías González/Desktop/Universidad/Semestres/2023-1/Motores de Juegos/Tarea/T1/frogger_lite/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-ms7lid
+
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe cmTC_b55d3 && [1/2] Building C object CMakeFiles\cmTC_b55d3.dir\CheckFunctionExists.c.obj
+[2/2] Linking C executable cmTC_b55d3.exe
+FAILED: cmTC_b55d3.exe 
+cmd.exe /C "cd . && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_b55d3.dir --rc=C:\PROGRA~2\WI3CF2~1\10\bin\100220~1.0\x64\rc.exe --mt=C:\PROGRA~2\WI3CF2~1\10\bin\100220~1.0\x64\mt.exe --manifests  -- C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\MSVC\1435~1.322\bin\Hostx64\x64\link.exe /nologo CMakeFiles\cmTC_b55d3.dir\CheckFunctionExists.c.obj  /out:cmTC_b55d3.exe /implib:cmTC_b55d3.lib /pdb:cmTC_b55d3.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  pthread.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
+LINK Pass 1: command "C:\PROGRA~1\MIB055~1\2022\COMMUN~1\VC\Tools\MSVC\1435~1.322\bin\Hostx64\x64\link.exe /nologo CMakeFiles\cmTC_b55d3.dir\CheckFunctionExists.c.obj /out:cmTC_b55d3.exe /implib:cmTC_b55d3.lib /pdb:cmTC_b55d3.pdb /version:0.0 /machine:x64 /debug /INCREMENTAL /subsystem:console pthread.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTFILE:CMakeFiles\cmTC_b55d3.dir/intermediate.manifest CMakeFiles\cmTC_b55d3.dir/manifest.res" failed (exit code 1104) with the following output:
+LINK : fatal error LNK1104: no se puede abrir el archivo 'pthread.lib'
+ninja: build stopped: subcommand failed.
+
+
+

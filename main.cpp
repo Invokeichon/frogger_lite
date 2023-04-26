@@ -1,5 +1,6 @@
 #include <iostream>
 #include <box_renderer.h>
+#include "source/movement.cpp"
 
 int main()
 {   
@@ -9,7 +10,7 @@ int main()
     constexpr unsigned int SCR_HEIGHT = 800;
 
     // canvas coordinates x,y go from -1 to 1
-    BoxRenderer::Canvas canvas(SCR_WIDTH, SCR_HEIGHT, "Frogger Lite");
+    BoxRenderer::Canvas canvas = BoxRenderer::Canvas(SCR_WIDTH, SCR_HEIGHT, "Frogger Lite");
 
     // black background
     canvas.setBackgroundColor(BoxRenderer::Color::Black());
@@ -29,14 +30,16 @@ int main()
     std::cout << frog_start << std::endl;
 
     // frog size should be 1 grid unit
-    BoxRenderer::BoxId frog = canvas.addBox({ {0.0f, frog_start}, BoxRenderer::Color::Green(), { 2.0f/g_columns, 2.0f/g_rows } });
+    BoxRenderer::BoxId frog_box = canvas.addBox({ {0.f, 0.f}, BoxRenderer::Color::Green(), { 2.0f/g_columns, 2.0f/g_rows } });
+    Movement player(frog_box);
 
+    bool moveRight = false;
     bool movingRight = true;
     float speed = 0.0001;
 
     auto update = [&](float dt)
     {
-        BoxRenderer::Box& box = canvas.getBox(frog);
+        BoxRenderer::Box& box = canvas.getBox(player.id());
 
         if (movingRight)
             box.position().x += speed * dt;
@@ -49,12 +52,18 @@ int main()
             movingRight = true;
     };
 
-    // user input
+    // generate lambda functions for player movement
+    auto up = [&player, &h_unit]() { player.set_move({ h_unit, 0.f }); };
+    auto down = [&player, &h_unit]() { player.set_move({ h_unit, 0.f }); };
+    auto left = [&player, &w_unit]() { player.set_move({ 0.f, -w_unit }); };
+    auto right = [&player, &w_unit]() { player.set_move({ 0.f, w_unit }); };
+
+
     Alice::Controller controller;
-    controller.onKeyPress(Alice::Key::W, [&]() { speed *= 2.0f; });
-    controller.onKeyPress(Alice::Key::A, [&]() { speed += 3.0f; });
-    controller.onKeyPress(Alice::Key::S, [&]() { speed /= 2.0f; });
-    controller.onKeyPress(Alice::Key::D, [&]() { speed -= 3.0f; });
+    controller.onKeyPress(Alice::Key::W, up);
+    controller.onKeyPress(Alice::Key::A, down);
+    controller.onKeyPress(Alice::Key::S, left);
+    controller.onKeyPress(Alice::Key::D, right);
     controller.onKeyPress(Alice::Key::SPACE, [&]() { speed = 0.0f; });
     controller.onKeyPress(Alice::Key::ESCAPE, [&]() { canvas.close(); });
 

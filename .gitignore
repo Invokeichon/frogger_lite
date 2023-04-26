@@ -34,3 +34,4 @@
 # Custom Added
 .vscode
 .vs
+out/

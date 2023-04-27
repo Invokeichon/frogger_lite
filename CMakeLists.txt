@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 project(frogger_project C CXX)
 
 
-add_executable(frogger_lite main.cpp "source/movement.cpp" )
+add_executable(frogger_lite main.cpp)
 set_property(TARGET frogger_lite PROPERTY CXX_STANDARD 20)
 
 # we include miniaudio.h directly, as it doesn't have a .cpp file to make a library
@@ -17,6 +17,3 @@ target_include_directories(frogger_lite PRIVATE ${MINIAUDIO_INCLUDE_DIR})
 add_subdirectory(deps)
 # box_renderer library is defined 
 target_link_libraries(frogger_lite PRIVATE box_renderer)
-
-
-

@@ -9,25 +9,11 @@ int main()
 {   
     // audio manager using miniaudio library
     SoundManager soundManager;
-    
-    //Octava 4
-    soundManager.scheduleNote(Note{ 250, 0.1, 261.626 }); // Do
-    soundManager.scheduleNote(Note{ 250, 0.1, 293.665 }); // Re
-    soundManager.scheduleNote(Note{ 250, 0.1, 329.628 }); // Mi
-    soundManager.scheduleNote(Note{ 250, 0.1, 349.228 }); // Fa
-    soundManager.scheduleNote(Note{ 250, 0.1, 391.995 }); // Sol
-    soundManager.scheduleNote(Note{ 250, 0.1, 440.000 }); // La
-    soundManager.scheduleNote(Note{ 500, 0.1, 493.883 }); // Si
-    //Octava 5
-    soundManager.scheduleNote(Note{ 750, 1.0, 523.251 }); // Do
 
     // start to play the scheduled notes
     soundManager.playNext();
 
-    // this is a simulation of other computing work, such as physics and graphics... it just take some time.
-    //std::this_thread::sleep_for(duration);
-
-    std::cout << "Hello World!" << std::endl;
+    std::cout << "Welcome to Frogger Lite!" << std::endl;
     // settings
     constexpr unsigned int SCR_WIDTH = 600;
     constexpr unsigned int SCR_HEIGHT = 800;
@@ -69,39 +55,51 @@ int main()
     std::vector<Car> car_vec;
     car_vec.push_back(car1);
     car_vec.push_back(car2);
-    auto update = [&player, &canvas, &y_win, &car_vec, &h_unit, &w_unit, &soundManager](float dt)
+
+
+    bool end = false;
+    auto update = [&player, &canvas, &y_win, &car_vec, &h_unit, &w_unit, &soundManager, &end](float dt)
     {
         // audio
         soundManager.tick(dt);
 
-        player.update(dt);
+        if (!end) {
+            player.update(dt);
 
-        // collision check
-        for (Car car : car_vec) {
-            car.update(dt);
-            // idea: check upper-right and lower-left corners of car
-            // then do comparison to player
-            // all cars are h_unit tall
-            if (car.position().y-h_unit/2 < player.position().y && player.position().y < car.position().y+h_unit/2) {
-                // cars can be w_unit or 3*w_unit wide, so we check using the corners
-                if (car.bottomLeft().x < player.position().x && player.position().x < car.upperRight().x ){
-                    std::cout << "collision" << car.position() << player.position() << std::endl;
+            // collision check
+            for (Car car : car_vec) {
+                car.update(dt);
+                // idea: check upper-right and lower-left corners of car
+                // then do comparison to player
+                // all cars are h_unit tall
+                if (car.position().y - h_unit / 2 < player.position().y && player.position().y < car.position().y + h_unit / 2) {
+                    // cars can be w_unit or 3*w_unit wide, so we check using the corners
+                    if (car.bottomLeft().x < player.position().x && player.position().x < car.upperRight().x) {
+                        soundManager.scheduleNote(Note{ 200, 0.15, 195.998 });
+                        soundManager.scheduleNote(Note{ 500, 0.15, 100.563 });
+                        //std::cout << "collision" << car.position() << player.position() << std::endl;
+                        end = true;
+                    }
                 }
             }
-        }
-        // win condition (accounting for float inaccurracies)
-        if (player.position().y + 0.0001 >= y_win) {
-            std::cout << "victory!" << std::endl;
+            // win condition (accounting for float inaccurracies)
+            if (player.position().y + 0.0001 >= y_win) {
+                std::cout << "Victory!" << std::endl;
+                end = true;
+            }
         }
     };
   
 
+    // player movement note
+    Note n_move{ 150, 0.1, 261.626 };
+
     // Player Input
     // generate lambda functions
-    auto up = [&player, &h_unit, &soundManager]() { player.set_move({ 0.f, 1 }); };
-    auto down = [&player, &h_unit]() { player.set_move({ 0.f, -1 }); };
-    auto left = [&player, &w_unit]() { player.set_move({ -1, 0.f }); };
-    auto right = [&player, &w_unit]() { player.set_move({ 1, 0.f }); };
+    auto up = [&player, &soundManager, &n_move]() { soundManager.scheduleNote(n_move); player.set_move({ 0.f, 1.f }); };
+    auto down = [&player, &soundManager, &n_move]() { soundManager.scheduleNote(n_move); player.set_move({ 0.f, -1.f }); };
+    auto left = [&player, &soundManager, &n_move]() { soundManager.scheduleNote(n_move); player.set_move({ -1.f, 0.f }); };
+    auto right = [&player, &soundManager, &n_move]() { soundManager.scheduleNote(n_move); player.set_move({ 1.f, 0.f }); };
 
 
     Alice::Controller controller;

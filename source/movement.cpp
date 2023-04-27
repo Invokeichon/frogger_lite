@@ -1,7 +1,6 @@
 #include <box_renderer.h>
 
-// manages player movement
-
+// wrapper class for Box that gives it movement functionality for player input
 class Movement {
 private:
 	// stores pointer to the box to directly modify it

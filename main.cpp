@@ -72,19 +72,25 @@ int main()
                 // idea: check upper-right and lower-left corners of car
                 // then do comparison to player
                 // all cars are h_unit tall
-                if (car.position().y - h_unit / 2 < player.position().y && player.position().y < car.position().y + h_unit / 2) {
+                if (car.position().y - h_unit/2 < player.position().y && player.position().y < car.position().y + h_unit/2) {
                     // cars can be w_unit or 3*w_unit wide, so we check using the corners
-                    if (car.bottomLeft().x < player.position().x && player.position().x < car.upperRight().x) {
+                    if ((car.bottomLeft().x < player.position().x - w_unit/2 && player.position().x - w_unit/2 < car.upperRight().x)
+                        || (car.bottomLeft().x < player.position().x + w_unit/2 && player.position().x + w_unit/2 < car.upperRight().x)) {
+                        // queue game over jingle
                         soundManager.scheduleNote(Note{ 200, 0.15, 195.998 });
                         soundManager.scheduleNote(Note{ 500, 0.15, 100.563 });
-                        //std::cout << "collision" << car.position() << player.position() << std::endl;
+                        //std::cout << "collision! car: " << car.position() << " player: " << player.position() << std::endl;
                         end = true;
                     }
                 }
             }
             // win condition (accounting for float inaccurracies)
             if (player.position().y + 0.0001 >= y_win) {
-                std::cout << "Victory!" << std::endl;
+                // queue victory jingle
+                soundManager.scheduleNote(Note{ 250, 0.15, 391.995 });
+                soundManager.scheduleNote(Note{ 250, 0.15, 440.000 });
+                soundManager.scheduleNote(Note{ 600, 0.15, 493.883 });
+                // std::cout << "Victory!" << std::endl;
                 end = true;
             }
         }
@@ -92,14 +98,17 @@ int main()
   
 
     // player movement note
-    Note n_move{ 150, 0.1, 261.626 };
+    Note n_move{ 120, 0.1, 261.626 };
+
+    // make a common note play function for all player inputs
+    auto play_move = [&soundManager, &n_move, &end]() {if (end) return; soundManager.scheduleNote(n_move); };
 
     // Player Input
     // generate lambda functions
-    auto up = [&player, &soundManager, &n_move]() { soundManager.scheduleNote(n_move); player.set_move({ 0.f, 1.f }); };
-    auto down = [&player, &soundManager, &n_move]() { soundManager.scheduleNote(n_move); player.set_move({ 0.f, -1.f }); };
-    auto left = [&player, &soundManager, &n_move]() { soundManager.scheduleNote(n_move); player.set_move({ -1.f, 0.f }); };
-    auto right = [&player, &soundManager, &n_move]() { soundManager.scheduleNote(n_move); player.set_move({ 1.f, 0.f }); };
+    auto up = [&player, &play_move]() { play_move(); player.set_move({ 0.f, 1.f }); };
+    auto down = [&player, &play_move]() { play_move(); player.set_move({ 0.f, -1.f }); };
+    auto left = [&player, &play_move]() { play_move(); player.set_move({ -1.f, 0.f }); };
+    auto right = [&player, &play_move]() { play_move(); player.set_move({ 1.f, 0.f }); };
 
 
     Alice::Controller controller;

@@ -30,32 +30,44 @@ int main()
 
     float car_speed = 0.001;
     float player_speed = 0.002;
-
-    
     
     // adding cars (sizes are 1 and 3 grid cells)
-    BoxRenderer::BoxId car_test = canvas.addBox({ {0.f, 0.f}, BoxRenderer::Color::Red(), { 2.0f / g_columns, 2.0f / g_rows } });
+    BoxRenderer::BoxId car_id1 = canvas.addBox({ {0.f, 5*h_unit/2}, BoxRenderer::Color::Red(), { w_unit, h_unit } });
+    BoxRenderer::BoxId car_id2 = canvas.addBox({ {0.f, 3*h_unit/2}, BoxRenderer::Color::Gray(), { w_unit * 3, h_unit} });
 
 
     // frog size is 1 grid cell
     // we want frog to start in the middle of the bottom row
     // added last so it's drawn on top of everything else
-    BoxRenderer::BoxId frog_id = canvas.addBox({ {0.f, -1 + h_unit / 2.f}, BoxRenderer::Color::Green(), { 2.0f / g_columns, 2.0f / g_rows } });
+    BoxRenderer::BoxId frog_id = canvas.addBox({ {0.f, -1 + h_unit / 2.f}, BoxRenderer::Color::Green(), { w_unit, h_unit} });
 
     // getBox must be called after adding all boxes
     Movement player(canvas.getBox(frog_id), player_speed, w_unit, h_unit);
-    Car car1(canvas.getBox(car_test), car_speed, w_unit, h_unit, -1);
+    Car car1(canvas.getBox(car_id1), car_speed, w_unit, h_unit, -1);
+    Car car2(canvas.getBox(car_id2), car_speed, w_unit, h_unit, 1);
     std::vector<Car> car_vec;
     car_vec.push_back(car1);
-    auto update = [&player, &canvas, &y_win, &car_vec](float dt)
+    car_vec.push_back(car2);
+    auto update = [&player, &canvas, &y_win, &car_vec, &h_unit, &w_unit](float dt)
     {
-        for (Car car : car_vec) {
-            car.update(dt);
-        }
         player.update(dt);
 
-        // win condition
-        if (player.position().y == y_win) {
+        // collision check
+        for (Car car : car_vec) {
+            car.update(dt);
+            // idea: check upper-right and lower-left corners of car
+            // then do comparison to player
+            // all cars are h_unit tall
+            if (car.position().y-h_unit/2 < player.position().y && player.position().y < car.position().y+h_unit/2) {
+                // cars can be w_unit or 3*w_unit wide, so we check using the corners
+                if (car.bottomLeft().x < player.position().x && player.position().x < car.upperRight().x ){
+                    std::cout << "collision" << car.position() << player.position() << std::endl;
+                }
+            }
+        }
+
+        // win condition (accounting for float inaccurracies)
+        if (player.position().y + 0.0001 >= y_win) {
             std::cout << "victory!" << std::endl;
         }
     };

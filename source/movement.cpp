@@ -54,7 +54,6 @@ public:
 				moving_ = false;
 				return;
 			}
-
 		}
 
 		if (move_.y != 0) {

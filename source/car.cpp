@@ -63,7 +63,7 @@ public:
 	}
 
 	// set up the position of the car before update loop
-	void move(const BoxRenderer::Vec2 pos) {
+	void initial_pos(const BoxRenderer::Vec2 pos) {
 		current_y_ = pos.y;
 		for (auto &[offset, id] : parts_) {
 			BoxRenderer::Box& part = canvas_->getBox(id);
@@ -74,15 +74,15 @@ public:
 
 	// check collision with player
 	const bool check_y_collision(const float& player_y) const {
-		return ((current_y_ - h_unit_ / 2 < player_y - h_unit_ / 2 + 0.001 && player_y - h_unit_ / 2 + 0.001 < current_y_ + h_unit_ / 2)
-			|| (current_y_ - h_unit_ / 2 < player_y + h_unit_ / 2 - 0.001 && player_y + h_unit_ / 2 - 0.001 < current_y_ + h_unit_ / 2));
+		return ((current_y_ - h_unit_ / 2 < player_y - h_unit_ * 0.4f && player_y - h_unit_ * 0.4f < current_y_ + h_unit_ / 2)
+			|| (current_y_ - h_unit_ / 2 < player_y + h_unit_ * 0.4f && player_y + h_unit_ * 0.4f < current_y_ + h_unit_ / 2));
 	}
 
 	// for x we take into account size
 	const bool check_x_collision(const float& player_x) {
 		BoxRenderer::Box& hitbox = canvas_->getBox(parts_[0.f]);
-		return ((hitbox.position().x - size_ * w_unit_ / 2 < player_x - w_unit_ / 2 && player_x - w_unit_ / 2 < hitbox.position().x + size_ * w_unit_ / 2)
-			|| (hitbox.position().x - size_ * w_unit_ / 2 < player_x + w_unit_ / 2 && player_x + w_unit_ / 2 < hitbox.position().x + size_ * w_unit_ / 2));
+		return ((hitbox.position().x - size_ * w_unit_ / 2 < player_x - w_unit_ * 0.4f && player_x - w_unit_ * 0.4f < hitbox.position().x + size_ * w_unit_ / 2)
+			|| (hitbox.position().x - size_ * w_unit_ / 2 < player_x + w_unit_ * 0.4f && player_x + w_unit_ * 0.4f < hitbox.position().x + size_ * w_unit_ / 2));
 	}
 
 	void update(const float dt) {

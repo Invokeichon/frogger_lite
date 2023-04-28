@@ -1,7 +1,7 @@
 #include <box_renderer.h>
 
 // wrapper class for Box that gives it movement functionality for player input
-class Movement {
+class Player {
 private:
 	// stores pointer to the box to directly modify it
 	BoxRenderer::Box* box_;
@@ -14,7 +14,7 @@ private:
 	float h_unit_;
 
 public:
-	Movement(BoxRenderer::Box& box, float& speed, float& w_unit, float& h_unit) {
+	Player(BoxRenderer::Box& box, float& speed, float& w_unit, float& h_unit) {
 		box_ = &box;
 		speed_ = speed;
 		w_unit_ = w_unit;
@@ -24,9 +24,15 @@ public:
 	void set_move(const BoxRenderer::Vec2& move) {
 		// don't want to overwrite in the middle of movement
 		if (moving_) return;
+		destination_ = { (*box_).position().x + move.x * w_unit_, (*box_).position().y + move.y * h_unit_ };
+		// player can't go out of bounds (off-screen)
+		// it's not necessary to check y>1 as it triggers the win condition
+		if (destination_.x < -1 || destination_.x > 1 || destination_.y < -1) {
+			moving_ = false;
+			return;
+		}
 		moving_ = true;
 		move_ = move;
-		destination_ = { (*box_).position().x + move.x*w_unit_, (*box_).position().y + move.y*h_unit_ };
 	}
 
 	const BoxRenderer::Vec2& position() const {

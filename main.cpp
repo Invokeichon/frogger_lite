@@ -1,6 +1,6 @@
 #include <iostream>
 #include <box_renderer.h>
-#include "source/movement.cpp"
+#include "source/player.cpp"
 #include "source/car.cpp"
 #include "source/sound_manager.cpp"
 
@@ -56,7 +56,7 @@ int main()
     BoxRenderer::BoxId frog_id = canvas.addBox({ {col1 + w_unit * g_columns / 2, row1}, BoxRenderer::Color::Green(), { w_unit, h_unit} });
 
     // getBox must be called after adding all boxes
-    Movement player(canvas.getBox(frog_id), player_speed, w_unit, h_unit);
+    Player player(canvas.getBox(frog_id), player_speed, w_unit, h_unit);
 
     std::vector<Car> car_vec;
     car_vec.push_back(car1);

@@ -1,6 +1,5 @@
 #include <iostream>
 #include <box_renderer.h>
-#include <vector>
 #include "source/movement.cpp"
 #include "source/car.cpp"
 #include "source/sound_manager.cpp"
@@ -25,8 +24,8 @@ int main()
     canvas.setBackgroundColor(BoxRenderer::Color::Black());
 
     // we want a 10x5 grid, we need to calculate positions
-    int g_columns = 7;
-    int g_rows = 10;
+    int g_columns = 10;
+    int g_rows = 12;
 
     float w_unit = 2.f / g_columns;
     float h_unit = 2.f / g_rows;
@@ -39,23 +38,29 @@ int main()
     float player_speed = 0.002;
     
     // adding cars (sizes are 1 and 3 grid cells)
-    BoxRenderer::BoxId car_id1 = canvas.addBox({ {0.f, 5*h_unit/2}, BoxRenderer::Color::Red(), { w_unit, h_unit } });
-    BoxRenderer::BoxId car_id2 = canvas.addBox({ {0.f, 3*h_unit/2}, BoxRenderer::Color::Gray(), { w_unit * 3, h_unit} });
+    // first and last rows can't have cars
+    // position needs to be at the middle of a grid cell
+    float row1 = -1 + h_unit / 2;
+    float col1 = -1 + w_unit / 2;
+   
+    Car car1(&canvas, car_speed, w_unit, h_unit, -1);
+    car1.move({ -0.5, 0.5 });
+
+    Car car2(&canvas, car_speed, w_unit, h_unit, -1, 3);
 
 
     // frog size is 1 grid cell
     // we want frog to start in the middle of the bottom row
     // added last so it's drawn on top of everything else
-    BoxRenderer::BoxId frog_id = canvas.addBox({ {0.f, -1 + h_unit / 2.f}, BoxRenderer::Color::Green(), { w_unit, h_unit} });
+    // 
+    BoxRenderer::BoxId frog_id = canvas.addBox({ {col1 + w_unit * g_columns / 2, row1}, BoxRenderer::Color::Green(), { w_unit, h_unit} });
 
     // getBox must be called after adding all boxes
     Movement player(canvas.getBox(frog_id), player_speed, w_unit, h_unit);
-    Car car1(canvas.getBox(car_id1), car_speed, w_unit, h_unit, -1);
-    Car car2(canvas.getBox(car_id2), car_speed, w_unit, h_unit, 1);
+
     std::vector<Car> car_vec;
     car_vec.push_back(car1);
     car_vec.push_back(car2);
-
 
     bool end = false;
     auto update = [&player, &canvas, &y_win, &car_vec, &h_unit, &w_unit, &soundManager, &end](float dt)
@@ -66,30 +71,27 @@ int main()
         if (!end) {
             player.update(dt);
 
-            // collision check
-            for (Car car : car_vec) {
+            // collision check for new cars
+            for (Car car : car_vec) { //placeholder for eventual new car list
                 car.update(dt);
-                // idea: check upper-right and lower-left corners of car
-                // then do comparison to player
-                // all cars are h_unit tall
-                if (car.position().y - h_unit/2 < player.position().y && player.position().y < car.position().y + h_unit/2) {
+                if (car.check_y_collision(player.position().y)) {
                     // cars can be w_unit or 3*w_unit wide, so we check using the corners
-                    if ((car.bottomLeft().x < player.position().x - w_unit/2 && player.position().x - w_unit/2 < car.upperRight().x)
-                        || (car.bottomLeft().x < player.position().x + w_unit/2 && player.position().x + w_unit/2 < car.upperRight().x)) {
+                    if (car.check_x_collision(player.position().x)) {
                         // queue game over jingle
-                        soundManager.scheduleNote(Note{ 200, 0.15, 195.998 });
-                        soundManager.scheduleNote(Note{ 500, 0.15, 100.563 });
+                        soundManager.scheduleNote(Note{ 200, 0.1, 195.998 });
+                        soundManager.scheduleNote(Note{ 500, 0.1, 100.563 });
                         //std::cout << "collision! car: " << car.position() << " player: " << player.position() << std::endl;
                         end = true;
                     }
                 }
             }
+
             // win condition (accounting for float inaccurracies)
             if (player.position().y + 0.0001 >= y_win) {
                 // queue victory jingle
-                soundManager.scheduleNote(Note{ 250, 0.15, 391.995 });
-                soundManager.scheduleNote(Note{ 250, 0.15, 440.000 });
-                soundManager.scheduleNote(Note{ 600, 0.15, 493.883 });
+                soundManager.scheduleNote(Note{ 250, 0.1, 391.995 });
+                soundManager.scheduleNote(Note{ 250, 0.1, 440.000 });
+                soundManager.scheduleNote(Note{ 600, 0.1, 493.883 });
                 // std::cout << "Victory!" << std::endl;
                 end = true;
             }

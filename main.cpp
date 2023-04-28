@@ -24,7 +24,7 @@ int main()
     constexpr unsigned int SCR_HEIGHT = 800;
     // grid settings
     constexpr unsigned int GRID_COLS = 10;
-    constexpr unsigned int GRID_ROWS = 12;
+    constexpr unsigned int GRID_ROWS = 13;
 
     // canvas coordinates x,y go from -1 to 1
     BoxRenderer::Canvas canvas = BoxRenderer::Canvas(SCR_WIDTH, SCR_HEIGHT, "Frogger Lite");
@@ -48,7 +48,11 @@ int main()
     float row1 = -1 + CELL_HEIGHT / 2;
     float col1 = -1 + CELL_WIDTH / 2;
     
-    // from rows 2 to 11 we have cars
+    // add dark green blocks covering the rows to indicate safe zones
+    canvas.addBox({ {0.f, row1}, BoxRenderer::Color::Color(0, 0.3, 0), { 2, CELL_HEIGHT } });
+    canvas.addBox({ {0.f, -row1}, BoxRenderer::Color::Color(0, 0.3, 0), { 2, CELL_HEIGHT } });
+
+    // from rows 2 to 12 we have cars
     // row 2 -- a speedy car
     Car row2_1(&canvas, car_speed*2, CELL_WIDTH, CELL_HEIGHT, -1);
     row2_1.move({ -0.5f, row1 + CELL_HEIGHT });
@@ -74,6 +78,8 @@ int main()
     row6_1.move({ -0.6f, row1 + 5 * CELL_HEIGHT });
 
     // no cars in row 7 --- a little rest for the player :)
+    // add a dark green block to indicate safe zone
+    canvas.addBox({ {0.f, row1 + 6 * CELL_HEIGHT}, BoxRenderer::Color::Color(0, 0.3, 0), { 2, CELL_HEIGHT } });
 
     // row 8 -- 3 cars
     Car row8_1(&canvas, car_speed * 1.3, CELL_WIDTH, CELL_HEIGHT, -1);
@@ -97,6 +103,16 @@ int main()
     Car row11_1(&canvas, car_speed * 2.3, CELL_WIDTH, CELL_HEIGHT, -1);
     row11_1.move({ 1.5f, row1 + 10 * CELL_HEIGHT });
 
+    // row 12 -- four spaced cars
+    Car row12_1(&canvas, car_speed * 1.1, CELL_WIDTH, CELL_HEIGHT, 1);
+    Car row12_2(&canvas, car_speed * 1.1, CELL_WIDTH, CELL_HEIGHT, 1);
+    Car row12_3(&canvas, car_speed * 1.1, CELL_WIDTH, CELL_HEIGHT, 1);
+    Car row12_4(&canvas, car_speed * 1.1, CELL_WIDTH, CELL_HEIGHT, 1);
+    row12_1.move({ 1.5f, row1 + 11 * CELL_HEIGHT });
+    row12_2.move({ 0.75f, row1 + 11 * CELL_HEIGHT });
+    row12_3.move({ -0.75f, row1 + 11 * CELL_HEIGHT });
+    row12_4.move({ -1.5f, row1 + 11 * CELL_HEIGHT });
+
     // frog size is 1 grid cell
     // we want frog to start in the middle of the bottom row
     // added last so it's drawn on top of everything else
@@ -106,7 +122,8 @@ int main()
     Player player(canvas.getBox(frog_id), player_speed, CELL_WIDTH, CELL_HEIGHT);
 
     // cars are put in a vector for convenience
-    std::vector<Car> car_vec = { row2_1, row3_1, row4_1, row4_2, row5_1, row5_2, row6_1, row8_1, row8_2, row8_3, row9_1, row10_1, row10_2, row11_1};
+    std::vector<Car> car_vec ={ row2_1, row3_1, row4_1, row4_2, row5_1, row5_2, row6_1, row8_1, row8_2, row8_3, 
+        row9_1, row10_1, row10_2, row11_1, row12_1, row12_2, row12_3, row12_4};
 
     // variable for end conditions
     bool end = false;

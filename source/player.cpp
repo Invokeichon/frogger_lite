@@ -14,11 +14,15 @@ private:
 	float h_unit_;
 
 public:
-	Player(BoxRenderer::Box& box, float& speed, float& w_unit, float& h_unit) {
+	Player(BoxRenderer::Box& box, float& speed, const float& w_unit, const float& h_unit) {
 		box_ = &box;
 		speed_ = speed;
 		w_unit_ = w_unit;
 		h_unit_ = h_unit;
+	}
+
+	const bool& moving() const {
+		return moving_;
 	}
 
 	void set_move(const BoxRenderer::Vec2& move) {

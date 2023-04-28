@@ -19,7 +19,7 @@ private:
 
 public:
 	// regular car
-	Car(BoxRenderer::Canvas* canvas, float speed, float& w_unit, float& h_unit, int dir) {
+	Car(BoxRenderer::Canvas* canvas, float speed, const float& w_unit, const float& h_unit, int dir) {
 		canvas_ = canvas;
 		w_unit_ = w_unit;
 		h_unit_ = h_unit;
@@ -38,7 +38,7 @@ public:
 		parts_[d_ * w_unit_ * 0.2f] = canvas_->addBox({ {d_*w_unit_*0.2f, 0.f}, BoxRenderer::Color::Color(0,1,1), { w_unit_*0.3f, h_unit_ * 0.5f} });
 	}
 	// if we specify size, we create a different car
-	Car(BoxRenderer::Canvas* canvas, float speed, float& w_unit, float& h_unit, int dir, int size) {
+	Car(BoxRenderer::Canvas* canvas, float speed, const float& w_unit, const float& h_unit, int dir, int size) {
 		canvas_ = canvas;
 		w_unit_ = w_unit;
 		h_unit_ = h_unit;
@@ -69,12 +69,12 @@ public:
 	}
 
 	// check collision with player
-	const bool& check_y_collision(const float& player_y) const {
+	const bool check_y_collision(const float& player_y) const {
 		return (current_y_ - h_unit_ / 2 < player_y && player_y < current_y_ + h_unit_ / 2);
 	}
 
 	// for x we take into account size
-	const bool& check_x_collision(const float& player_x) {
+	const bool check_x_collision(const float& player_x) {
 		return (canvas_->getBox(parts_[0.f]).position().x - size_* w_unit_ / 2 < player_x &&
 			player_x < canvas_->getBox(parts_[0.f]).position().x + size_ * w_unit_ / 2);
 	}

@@ -33,8 +33,8 @@ public:
 		parts_[{0.f, -h_unit * 0.19f}] = canvas_->addBox({ {0.f, 0.f}, BoxRenderer::Color::Color(0, 0.55, 0), { w_unit_ * 0.8f, h_unit_ * 0.4f } });
 		// body (2 parts)
 		float body_offset_y = h_unit_ * 0.2f;
-		parts_[{0.f, body_offset_y}] = canvas_->addBox({ {0.f, body_offset_y}, BoxRenderer::Color::Green(), { w_unit_ * 0.4f, h_unit_*0.4f } });
-		parts_[{0.f, -body_offset_y}] = canvas_->addBox({ {0.f, -body_offset_y}, BoxRenderer::Color::Green(), { w_unit_ * 0.6f, h_unit_*0.4f } });
+		parts_[{0.f, body_offset_y}] = canvas_->addBox({ {0.f, body_offset_y}, BoxRenderer::Color::Color(0, 0.9, 0), { w_unit_ * 0.4f, h_unit_*0.4f } });
+		parts_[{0.f, -body_offset_y}] = canvas_->addBox({ {0.f, -body_offset_y}, BoxRenderer::Color::Color(0, 0.9, 0), { w_unit_ * 0.6f, h_unit_*0.4f } });
 		// eyes (symmetric)
 		parts_[{w_unit_ * 0.2f, body_offset_y}] = canvas_->addBox({ {w_unit_ * 0.2f, body_offset_y}, BoxRenderer::Color::White(), { w_unit_ * 0.1f, h_unit_ * 0.2f} });
 		parts_[{-w_unit_ * 0.2f, body_offset_y}] = canvas_->addBox({ {-w_unit_ * 0.2f, body_offset_y}, BoxRenderer::Color::White(), { w_unit_ * 0.1f, h_unit_ * 0.2f} });

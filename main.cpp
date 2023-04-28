@@ -13,10 +13,10 @@ int main()
     soundManager.playNext();
 
     // schedule a beginning jingle
-    soundManager.scheduleNote(Note{ 250, 0.1, 391.995 });
-    soundManager.scheduleNote(Note{ 250, 0.1, 440.000 });
-    soundManager.scheduleNote(Note{ 250, 0.1, 493.883 });
-    soundManager.scheduleNote(Note{ 750, 0.1, 523.251 });
+    soundManager.scheduleNote(Note{ 150, 0.1, 391.995 });
+    soundManager.scheduleNote(Note{ 150, 0.1, 440.000 });
+    soundManager.scheduleNote(Note{ 150, 0.1, 493.883 });
+    soundManager.scheduleNote(Note{ 500, 0.1, 523.251 });
 
     std::cout << "Welcome to Frogger Lite!" << std::endl;
     // window settings
@@ -54,7 +54,7 @@ int main()
     row2_1.move({ -0.5f, row1 + CELL_HEIGHT });
 
     // row 3 -- a truck
-    Car row3_1(&canvas, car_speed*1.1, CELL_WIDTH, CELL_HEIGHT, -1, 3);
+    Car row3_1(&canvas, car_speed*1.1, CELL_WIDTH, CELL_HEIGHT, 1, 3);
     row3_1.move({0.f, row1 + 2*CELL_HEIGHT});
 
     // row 4 -- 2 trucks
@@ -70,7 +70,7 @@ int main()
     row5_2.move({ 0.3f, row1 + 4 * CELL_HEIGHT });
 
     // row 6 -- a speedy truck
-    Car row6_1(&canvas, car_speed * 2, CELL_WIDTH, CELL_HEIGHT, -1, 3);
+    Car row6_1(&canvas, car_speed * 2, CELL_WIDTH, CELL_HEIGHT, 1, 3);
     row6_1.move({ -0.6f, row1 + 5 * CELL_HEIGHT });
 
     // no cars in row 7 --- a little rest for the player :)
@@ -79,17 +79,17 @@ int main()
     Car row8_1(&canvas, car_speed * 1.3, CELL_WIDTH, CELL_HEIGHT, -1);
     Car row8_2(&canvas, car_speed * 1.3, CELL_WIDTH, CELL_HEIGHT, -1);
     Car row8_3(&canvas, car_speed * 1.3, CELL_WIDTH, CELL_HEIGHT, -1);
-    row8_1.move({ -0.9f, row1 + 7 * CELL_HEIGHT });
-    row8_2.move({ -0.5f, row1 + 7 * CELL_HEIGHT });
-    row8_3.move({ -0.1f, row1 + 7 * CELL_HEIGHT });
+    row8_1.move({ -1.f, row1 + 7 * CELL_HEIGHT });
+    row8_2.move({ 0.f, row1 + 7 * CELL_HEIGHT });
+    row8_3.move({ 1.f, row1 + 7 * CELL_HEIGHT });
 
     // row 9 - 1 SLOW truck
     Car row9_1(&canvas, car_speed*0.5f, CELL_WIDTH, CELL_HEIGHT, -1, 3);
     row9_1.move({ -0.5f, row1 + 8 * CELL_HEIGHT });
 
     // row 10 - 2 slightly fast trucks spaced
-    Car row10_1(&canvas, car_speed * 0.5f, CELL_WIDTH, CELL_HEIGHT, -1, 3);
-    Car row10_2(&canvas, car_speed * 0.5f, CELL_WIDTH, CELL_HEIGHT, -1, 3);
+    Car row10_1(&canvas, car_speed * 0.5f, CELL_WIDTH, CELL_HEIGHT, 1, 3);
+    Car row10_2(&canvas, car_speed * 0.5f, CELL_WIDTH, CELL_HEIGHT, 1, 3);
     row10_1.move({ 1.f, row1 + 9 * CELL_HEIGHT });
     row10_2.move({ -1.f, row1 + 9 * CELL_HEIGHT });
 

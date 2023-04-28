@@ -5,14 +5,16 @@
 class Car {
 private:
 	// stores pointer to the canvas to generate car in it
-	BoxRenderer::Canvas* canvas_ = NULL;
+	BoxRenderer::Canvas* canvas_;
 	// car moves in a fixed direction, doesn't care about columns
 	// only the row it's in, so dir is either 1 (to the right) or -1 (to the left)
 	int d_ = 1;
 	int size_ = 1;
 	float speed_ = 0.f;
+	// width and height of a grid cell
 	float w_unit_ = 0.f;
 	float h_unit_ = 0.f;
+	// current y for the car
 	float current_y_ = 0.f;
 	// here we store all the boxes that make up the car
 	std::map<float, BoxRenderer::BoxId> parts_;
@@ -37,7 +39,8 @@ public:
 		// car window
 		parts_[d_ * w_unit_ * 0.2f] = canvas_->addBox({ {d_*w_unit_*0.2f, 0.f}, BoxRenderer::Color::Color(0,1,1), { w_unit_*0.3f, h_unit_ * 0.5f} });
 	}
-	// if we specify size, we create a different car
+	// if we specify size, we create a truck
+	// tested only for size 3; might break for different sizes
 	Car(BoxRenderer::Canvas* canvas, float speed, const float& w_unit, const float& h_unit, int dir, int size) {
 		canvas_ = canvas;
 		w_unit_ = w_unit;
@@ -45,17 +48,18 @@ public:
 		d_ = dir;
 		speed_ = speed;
 		size_ = size;
-		// building the car:
+		// building the truck:
 		// hitbox
 		parts_[0.f] = canvas_->addBox({ {0.f, 0.f}, BoxRenderer::Color::Black(), { size_*w_unit_, h_unit_ } });
 		// wheels (independent of dir)
 		parts_[size_ * -w_unit_ * 0.3f] = canvas_->addBox({ {size_ * -w_unit_ * 0.3f, 0.f}, BoxRenderer::Color::White(), { w_unit_ * 0.25f, h_unit_ } });
 		parts_[size_ * w_unit_ * 0.3f] = canvas_->addBox({ {size_ * w_unit_ * 0.3f, 0.f}, BoxRenderer::Color::White(), { w_unit_ * 0.25f, h_unit_ } });
 		// car body (2 parts)
-		parts_[-d_ * size_ * w_unit_ / 4] = canvas_->addBox({ {-d_ * size_ * w_unit_ / 4, 0.f}, BoxRenderer::Color::Gray(), { 2* size_ * w_unit_ / 3, h_unit_ * 0.9f } });
-		parts_[d_ * size_ * w_unit_ / 4] = canvas_->addBox({ {d_ * size_ * w_unit_ / 4, 0.f}, BoxRenderer::Color::Yellow(), { size_ * w_unit_ /3, h_unit_ * 0.8f } });
+		//    -d_ * size_ *w_unit_ / 2 displaces the box to the border of the hitbox, + d_ * size_ * w_unit_ / 3 centers it
+		parts_[-d_ * size_ * w_unit_ / 2 + d_ * size_ * w_unit_ / 3] = canvas_->addBox({ {-d_ * size_ *w_unit_ / 2 + d_ * size_ * w_unit_ / 3, 0.f}, BoxRenderer::Color::Gray(), { 2* size_ * w_unit_ / 3, h_unit_ * 0.9f } });
+		parts_[d_ * size_ * w_unit_ / 2 + -d_ * size_ * w_unit_ / 6] = canvas_->addBox({ {d_ * size_ * w_unit_ / 2 + -d_ * size_ * w_unit_ / 6, 0.f}, BoxRenderer::Color::Yellow(), { size_ * w_unit_ /3, h_unit_ * 0.8f } });
 		// car window
-		parts_[d_ * size_ * w_unit_ * 0.2f] = canvas_->addBox({ {d_ * size_ * w_unit_ * 0.2f, 0.f}, BoxRenderer::Color::Blue(), { size_ * w_unit_ * 0.15f, h_unit_ * 0.5f} });
+		parts_[d_ * size_ * w_unit_ / 2 + -d_ * size_ * w_unit_ * 0.15f] = canvas_->addBox({ { d_ * size_ * w_unit_ / 2 + -d_ * size_ * w_unit_ * 0.15f, 0.f}, BoxRenderer::Color::Blue(), { size_ * w_unit_ * 0.15f, h_unit_ * 0.5f} });
 	}
 
 	// set up the position of the car before update loop
@@ -70,13 +74,15 @@ public:
 
 	// check collision with player
 	const bool check_y_collision(const float& player_y) const {
-		return (current_y_ - h_unit_ / 2 < player_y && player_y < current_y_ + h_unit_ / 2);
+		return ((current_y_ - h_unit_ / 2 < player_y - h_unit_ / 2 + 0.001 && player_y - h_unit_ / 2 + 0.001 < current_y_ + h_unit_ / 2)
+			|| (current_y_ - h_unit_ / 2 < player_y + h_unit_ / 2 - 0.001 && player_y + h_unit_ / 2 - 0.001 < current_y_ + h_unit_ / 2));
 	}
 
 	// for x we take into account size
 	const bool check_x_collision(const float& player_x) {
-		return (canvas_->getBox(parts_[0.f]).position().x - size_* w_unit_ / 2 < player_x &&
-			player_x < canvas_->getBox(parts_[0.f]).position().x + size_ * w_unit_ / 2);
+		BoxRenderer::Box& hitbox = canvas_->getBox(parts_[0.f]);
+		return ((hitbox.position().x - size_ * w_unit_ / 2 < player_x - w_unit_ / 2 && player_x - w_unit_ / 2 < hitbox.position().x + size_ * w_unit_ / 2)
+			|| (hitbox.position().x - size_ * w_unit_ / 2 < player_x + w_unit_ / 2 && player_x + w_unit_ / 2 < hitbox.position().x + size_ * w_unit_ / 2));
 	}
 
 	void update(const float dt) {

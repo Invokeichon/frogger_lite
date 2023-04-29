@@ -1,8 +1,8 @@
 #include <iostream>
 #include <box_renderer.h>
-#include "source/player.cpp"
-#include "source/car.cpp"
-#include "source/sound_manager.cpp"
+#include "player.cpp"
+#include "car.cpp"
+#include "sound_manager.cpp"
 
 int main()
 {   
